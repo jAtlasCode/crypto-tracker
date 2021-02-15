@@ -3373,28 +3373,28 @@ server.listen().then(({ port }) => {
   console.log(`🚀  Server ready at ${port}`);
 });
 
-app.get("/cryptos/latest", (req, res) => {
-  console.log("🚀Fetching latest cryptos!--");
-  axios
-    .get(url, {
-      headers: {
-        "X-CMC_PRO_API_KEY": authToken,
-      },
-    })
-    .then((response) => {
-      response.status === 200
-        ? console.log("✅ Request Successful ✅")
-        : console.log("❌ Request failed ❌");
+// app.get("/cryptos/latest", (req, res) => {
+//   console.log("🚀Fetching latest cryptos!--");
+//   axios
+//     .get(url, {
+//       headers: {
+//         "X-CMC_PRO_API_KEY": authToken,
+//       },
+//     })
+//     .then((response) => {
+//       response.status === 200
+//         ? console.log("✅ Request Successful ✅")
+//         : console.log("❌ Request failed ❌");
 
-      const data = response.data;
-      console.log(data);
-      res.send(data);
-    })
-    .catch((error) => {
-      console.log(error);
-      console.error(error);
-    });
-});
+//       const data = response.data;
+//       console.log(data);
+//       res.send(data);
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//       console.error(error);
+//     });
+// });
 
 // server.listen(port, () => {
 //   console.log(`listening on ${port}`);
