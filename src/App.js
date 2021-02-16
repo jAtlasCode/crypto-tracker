@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./App.css";
 import "antd/dist/antd.css";
 import { Table, Tag, Space } from "antd";
-import {
-  ApolloClient,
-  InMemoryCache,
-  gql,
-  ApolloProvider,
-  useQuery,
-} from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 const axios = require("axios");
+
+const formatter = new Intl.NumberFormat("en-us", {
+  style: "currency",
+  currency: "USD",
+});
 
 const columns = [
   {
@@ -40,8 +39,44 @@ const columns = [
   },
   {
     title: "Price",
-    dataIndex: "price",
+    // dataIndex: "price",
     key: "price",
+    render: (record) => {
+      let price = record.quote.USD.price;
+
+      price = formatter.format(price);
+      return price;
+    },
+    sorter: {
+      compare: (a, b) =>
+        parseFloat(a.quote.USD.price) - parseFloat(b.quote.USD.price),
+    },
+  },
+  {
+    title: "Volume (24h)",
+    key: "volume",
+    render: (record) => {
+      let vol = record.quote.USD.volume_24h;
+      vol = formatter.format(vol);
+      return vol;
+    },
+    sorter: {
+      compare: (a, b) =>
+        parseFloat(a.quote.USD.volume_24h) - parseFloat(b.quote.USD.volume_24h),
+    },
+  },
+  {
+    title: "Market cap",
+    key: "market cap",
+    render: (record) => {
+      let mCap = record.quote.USD.market_cap;
+      mCap = formatter.format(mCap);
+      return mCap;
+    },
+    sorter: {
+      compare: (a, b) =>
+        parseFloat(a.quote.USD.market_cap) - parseFloat(b.quote.USD.market_cap),
+    },
   },
   // {
   //   title: "Change",
@@ -56,10 +91,6 @@ const columns = [
   //   title: "View",
   //   dataIndex: "view",
   //   key: "view",
-  //   // sorter: {
-  //   //   compare: (a, b) => a.english - b.english,
-  //   //   multiple: 1,
-  //   // },
   // },
 ];
 
@@ -120,8 +151,6 @@ const COIN_LIST_QUERY = gql`
 `;
 
 function App() {
-  // holds latest crypto data
-  // const [cryptos, setCryptos] = useState("");
   const { loading, error, data } = useQuery(COIN_LIST_QUERY);
 
   if (loading) return <p>Loading...</p>;
